@@ -6,6 +6,8 @@ import StoreContext, {reducer, initialState, fetchSuccess} from './store/index'
 
 import SearchBar from './components/search-bar'
 import QuotesList from './components/quotes'
+import Title from './components/title'
+import SubTitle from './components/sub-title'
 
 // Axios
 import axios from 'axios'
@@ -23,9 +25,17 @@ const App = () => {
 
   return (
     <div className="App">
-      <div className="App-header">
-        Shakespeare Search
-      </div>
+      <Title>
+        Shake Search
+      </Title>
+
+      <SubTitle>
+        Look for snippets containing
+        <br/>
+        key words in the complete works of
+        <br/>
+        William Shakespeare
+      </SubTitle>
 
       <StoreContext.Provider value={{store, dispatch}}>
         <SearchBar onSubmit={(text) => searchQuery(

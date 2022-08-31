@@ -1,10 +1,10 @@
-.App {
-  text-align: center;
+html,body {
+  background-color: #3f6072;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.App {
+  text-align: center;
+  font-family: 'Courier New', monospace;
 }
 
 @media (prefers-reduced-motion: no-preference) {

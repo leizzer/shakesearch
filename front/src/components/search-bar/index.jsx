@@ -1,9 +1,43 @@
 import React, {useState, useContext} from 'react'
-import StoreContext, {fetchSuccess} from '../../store'
+import styled from 'styled-components'
+
+const Form = styled.form`
+  display: flex;
+  align-items: stretch;
+  padding: 2rem 2rem;
+  with: 100%;
+  justify-content: center;
+  align-content: space-between;
+`
+
+const TextInput = styled.input.attrs({
+  type: 'text'
+})`
+  align-self: auto;
+  flex-basis: 80%;
+  line-height: 4rem;
+  text-align: center;
+  color: #452f02;
+  background-color: #85a8bb;
+  border: none;
+  border-radius: 10px 0 0;
+`
+
+const SubmitButton = styled.button.attrs({
+  type: 'submit'
+})`
+  align-self: auto;
+  flex-basis: 20%;
+  font-size: 1.3rem;
+  color: #452f02;
+  background-color: #85a8bb;
+  border: none;
+  border-left: 2px solid #b3c8d5;
+  border-radius: 0 10px 0 0;
+`
 
 const SearchBar = ({onSubmit}) => {
   const [value, setValue] = useState('')
-  const {dispatch} = useContext(StoreContext)
 
   const handleChange = (event) => {
     setValue(event.target.value)
@@ -14,13 +48,12 @@ const SearchBar = ({onSubmit}) => {
     onSubmit(value)
   }
 
-  return <div>
-    <form id="form" onSubmit={handleSubmit}>
-      <label htmlFor="query">Query</label>
-      <input type="text" id="query" name="query" value={value} onChange={handleChange}/>
-      <button type="submit">Search</button>
-    </form>
-  </div>
+  return (
+    <Form id="form" onSubmit={handleSubmit}>
+      <TextInput id="query" name="query" value={value} onChange={handleChange}/>
+      <SubmitButton>Search</SubmitButton>
+    </Form>
+  )
 }
 
 export default SearchBar
