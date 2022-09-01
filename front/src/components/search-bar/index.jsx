@@ -40,7 +40,7 @@ const SearchBar = ({onSubmit}) => {
   const [value, setValue] = useState('')
 
   const handleChange = (event) => {
-    setValue(event.target.value)
+    setValue(event.target.value.trim())
   }
 
   const handleSubmit = (event) => {

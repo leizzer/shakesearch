@@ -2,7 +2,7 @@ import React, {useReducer} from 'react'
 import logo from './logo.svg'
 import './App.css'
 
-import StoreContext, {reducer, initialState, startFetch, endFetch, fetchSuccess} from './store/index'
+import StoreContext, {reducer, initialState, setQuery, startFetch, endFetch, fetchSuccess} from './store'
 
 import SearchBar from './components/search-bar'
 import QuotesList from './components/quotes'
@@ -29,6 +29,7 @@ const App = () => {
 
   const submitQuery = (text) => {
     dispatch(startFetch())
+    dispatch(setQuery(text))
 
     searchQuery(
       text,
@@ -46,7 +47,7 @@ const App = () => {
       <SubTitle>
         Look for snippets containing
         <br/>
-        key words in the complete works of
+        a key word in the complete works of
         <br/>
         William Shakespeare
       </SubTitle>

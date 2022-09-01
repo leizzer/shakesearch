@@ -7,6 +7,12 @@ html,body {
   font-family: 'Courier New', monospace;
 }
 
+.highlighted {
+  background-color: #fbd88d;
+  color: #263944;
+  font-style: italic;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

@@ -30,19 +30,27 @@ const Work = styled.p`
 `
 
 const List = () => {
-  const {store} = useContext(StoreContext)
+  const {store: {quotes, query}} = useContext(StoreContext)
 
-  const quotes = store.quotes.map((quote, i) => (
+  const prepareSnippet = (text) => {
+    const regex = new RegExp(`(?:\r\n|\r|\n|${query})`, 'g')
+    return sanitize(text).replace(
+      regex,
+      (match) => match == query ? `<span class="highlighted">${query}</span>` : '<br/>'
+    )
+  }
+
+  const list = quotes.map((quote, i) => (
     quote.Snippets.map((snippet, j) => (
       <Quote key={`${i}-${j}`}>
-        <Snippet  dangerouslySetInnerHTML={{__html: sanitize(snippet).replace(/(?:\r\n|\r|\n)/g, '<br>')}} />
+        <Snippet  dangerouslySetInnerHTML={{__html: prepareSnippet(snippet)}} />
         <Work>{quote.Work}</Work>
       </Quote>
     ))
   ))
 
   return (
-    <Quotes> {quotes} </Quotes>
+    <Quotes> {list} </Quotes>
   )
 }
 
