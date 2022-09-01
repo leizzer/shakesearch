@@ -15,7 +15,7 @@ import axios from 'axios'
 const URL = 'http://localhost:3001'
 
 const searchQuery = (text, callback) => axios.get(`${URL}/search?q=${text}`)
-  .then((response) => callback(response.data))
+  .then((response) => callback(response.data.Data))
   .catch((error) => console.log('ERROR: ', error))
 ///////////////////////////////////////////////////////////////////////
 

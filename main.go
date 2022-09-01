@@ -12,8 +12,21 @@ import (
 )
 
 func main() {
+	content, err := ioutil.ReadFile("small_json.json")
+	if err != nil {
+		log.Fatal("Error reading JSON: ", err)
+	}
+
+	////////////////////////
+	var completeWorks Works
+	err = json.Unmarshal(content, &completeWorks)
+	if err != nil {
+		log.Fatal("Error during Unmarshal: ", err)
+	}
+	////////////////////////
+
 	searcher := Searcher{}
-	err := searcher.Load("completeworks.txt")
+	err = searcher.LoadFile("completeworks.txt")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -21,7 +34,7 @@ func main() {
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/", fs)
 
-	http.HandleFunc("/search", handleSearch(searcher))
+	http.HandleFunc("/search", handleSearch(searcher, completeWorks))
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -44,7 +57,16 @@ type Searcher struct {
 	SuffixArray   *suffixarray.Index
 }
 
-func handleSearch(searcher Searcher) func(w http.ResponseWriter, r *http.Request) {
+type Result struct {
+	Work     string
+	Snippets []string
+}
+
+type Results struct {
+	Data []Result
+}
+
+func handleSearch(searcher Searcher, entireWork Works) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		enableCors(&w)
 
@@ -54,7 +76,18 @@ func handleSearch(searcher Searcher) func(w http.ResponseWriter, r *http.Request
 			w.Write([]byte("missing search query in URL params"))
 			return
 		}
-		results := searcher.Search(query[0])
+
+		results := new(Results)
+
+		for _, work := range entireWork.Data {
+			//TODO: maybe preload the search struct
+			searcher.Load(work.Contents)
+
+			searchResult := searcher.Search(query[0])
+
+			results.Data = append(results.Data, Result{work.Name, searchResult})
+		}
+
 		buf := &bytes.Buffer{}
 		enc := json.NewEncoder(buf)
 		err := enc.Encode(results)
@@ -63,15 +96,22 @@ func handleSearch(searcher Searcher) func(w http.ResponseWriter, r *http.Request
 			w.Write([]byte("encoding failure"))
 			return
 		}
+
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(buf.Bytes())
 	}
 }
 
-func (s *Searcher) Load(filename string) error {
+func (s *Searcher) Load(data string) error {
+	s.CompleteWorks = data
+	s.SuffixArray = suffixarray.New([]byte(data))
+	return nil
+}
+
+func (s *Searcher) LoadFile(filename string) error {
 	dat, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return fmt.Errorf("Load: %w", err)
+		return fmt.Errorf("LoadFile: %w", err)
 	}
 	s.CompleteWorks = string(dat)
 	s.SuffixArray = suffixarray.New(dat)
@@ -80,9 +120,33 @@ func (s *Searcher) Load(filename string) error {
 
 func (s *Searcher) Search(query string) []string {
 	idxs := s.SuffixArray.Lookup([]byte(query), -1)
+	size := len(s.CompleteWorks)
+
 	results := []string{}
+
 	for _, idx := range idxs {
-		results = append(results, s.CompleteWorks[idx-250:idx+250])
+		left := idx - 250
+		right := idx + 250
+
+		if left <= 0 {
+			left = 0
+		}
+
+		if right >= size {
+			right = size - 1
+		}
+
+		results = append(results, s.CompleteWorks[left:right])
 	}
+
 	return results
+}
+
+type Work struct {
+	Name     string
+	Contents string
+}
+
+type Works struct {
+	Data []Work
 }
