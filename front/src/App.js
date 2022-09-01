@@ -2,26 +2,40 @@ import React, {useReducer} from 'react'
 import logo from './logo.svg'
 import './App.css'
 
-import StoreContext, {reducer, initialState, fetchSuccess} from './store/index'
+import StoreContext, {reducer, initialState, startFetch, endFetch, fetchSuccess} from './store/index'
 
 import SearchBar from './components/search-bar'
 import QuotesList from './components/quotes'
 import Title from './components/title'
 import SubTitle from './components/sub-title'
+import Loading from './components/loading'
 
 // Axios
 import axios from 'axios'
 
 const URL = 'http://localhost:3001'
 
-const searchQuery = (text, callback) => axios.get(`${URL}/search?q=${text}`)
+const searchQuery = (text, callback, errCallback) => axios.get(`${URL}/search?q=${text}`)
   .then((response) => callback(response.data.Data))
-  .catch((error) => console.log('ERROR: ', error))
+  .catch((error) => {
+    errCallback()
+    console.log('ERROR: ', error)
+  })
 ///////////////////////////////////////////////////////////////////////
 
 const App = () => {
 
   const [store, dispatch] = useReducer(reducer, initialState)
+
+  const submitQuery = (text) => {
+    dispatch(startFetch())
+
+    searchQuery(
+      text,
+      (response) => dispatch(fetchSuccess(response)),
+      () => dispatch(endFetch())
+    )
+  }
 
   return (
     <div className="App">
@@ -38,11 +52,10 @@ const App = () => {
       </SubTitle>
 
       <StoreContext.Provider value={{store, dispatch}}>
-        <SearchBar onSubmit={(text) => searchQuery(
-          text,
-          (response) => dispatch(fetchSuccess(response))
-        )}/>
-        <QuotesList />
+        <SearchBar onSubmit={submitQuery}/>
+        {
+          store.fetching ? <Loading/> : <QuotesList />
+        }
       </StoreContext.Provider>
     </div>
   )

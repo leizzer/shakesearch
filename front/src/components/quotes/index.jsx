@@ -32,9 +32,9 @@ const Work = styled.p`
 const List = () => {
   const {store} = useContext(StoreContext)
 
-  const quotes = store.quotes.map((quote, index) => (
-    quote.Snippets.map((snippet) => (
-      <Quote key={index}>
+  const quotes = store.quotes.map((quote, i) => (
+    quote.Snippets.map((snippet, j) => (
+      <Quote key={`${i}-${j}`}>
         <Snippet  dangerouslySetInnerHTML={{__html: sanitize(snippet).replace(/(?:\r\n|\r|\n)/g, '<br>')}} />
         <Work>{quote.Work}</Work>
       </Quote>

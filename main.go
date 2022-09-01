@@ -12,7 +12,7 @@ import (
 )
 
 func main() {
-	content, err := ioutil.ReadFile("small_json.json")
+	content, err := ioutil.ReadFile("completeworks.json")
 	if err != nil {
 		log.Fatal("Error reading JSON: ", err)
 	}
