@@ -33,10 +33,10 @@ const List = () => {
   const {store: {quotes, query}} = useContext(StoreContext)
 
   const prepareSnippet = (text) => {
-    const regex = new RegExp(`(?:\r\n|\r|\n|${query})`, 'g')
+    const regex = new RegExp(`(?:\r\n|\r|\n|${query})`, 'gi')
     return sanitize(text).replace(
       regex,
-      (match) => match == query ? `<span class="highlighted">${query}</span>` : '<br/>'
+      (match) => match.toUpperCase() === query.toUpperCase() ? `<span class="highlighted">${match}</span>` : '<br/>'
     )
   }
 

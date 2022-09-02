@@ -47,7 +47,7 @@ const App = () => {
       <SubTitle>
         Look for snippets containing
         <br/>
-        a key word in the complete works of
+        <span className="highlighted">a key word</span> in the complete works of
         <br/>
         William Shakespeare
       </SubTitle>

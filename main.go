@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -104,7 +105,7 @@ func handleSearch(searcher Searcher, entireWork Works) func(w http.ResponseWrite
 
 func (s *Searcher) Load(data string) error {
 	s.CompleteWorks = data
-	s.SuffixArray = suffixarray.New([]byte(data))
+	s.SuffixArray = suffixarray.New([]byte(strings.ToLower(data)))
 	return nil
 }
 
@@ -113,6 +114,7 @@ func (s *Searcher) LoadFile(filename string) error {
 	if err != nil {
 		return fmt.Errorf("LoadFile: %w", err)
 	}
+
 	s.CompleteWorks = string(dat)
 	s.SuffixArray = suffixarray.New(dat)
 	return nil
