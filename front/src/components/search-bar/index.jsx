@@ -41,6 +41,7 @@ const SearchBar = ({onSubmit}) => {
   const [value, setValue] = useState()
 
   const onShake = () => {
+    alert('shake')
     if (value) {
       onSubmit(value)
       return
@@ -61,11 +62,11 @@ const SearchBar = ({onSubmit}) => {
 
   useEffect(() => {
     const shakeDetector = new ShakeDetector()
-    const requestTrigger = document.getElementById('requestTrigger');
+    //const requestTrigger = document.getElementById('requestTrigger');
 
-    shakeDetector.requestPermission(requestTrigger).then(() => {
+    //shakeDetector.requestPermission(requestTrigger).then(() => {
       shakeDetector.start();
-    });
+    //});
 
     window.addEventListener(ShakeDetector.SHAKE_EVENT, onShake);
     return () => window.removeEventListener(ShakeDetector.SHAKE_EVENT, onShake);
