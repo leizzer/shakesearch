@@ -1,5 +1,6 @@
-import React, {useState, useContext} from 'react'
+import React, {useEffect, useState, useContext} from 'react'
 import styled from 'styled-components'
+import ShakeDetector from 'shake-detector';
 
 const Form = styled.form`
   display: flex;
@@ -37,7 +38,38 @@ const SubmitButton = styled.button.attrs({
 `
 
 const SearchBar = ({onSubmit}) => {
-  const [value, setValue] = useState('')
+  const [value, setValue] = useState()
+
+  const onShake = () => {
+    if (value) {
+      onSubmit(value)
+      return
+    }
+
+    const samples = [
+      "love",
+      "Macbeth",
+      "Romeo",
+      "Othello"
+    ]
+
+    const index = Math.floor(Math.random()*samples.length)
+    const sample = samples[index]
+    setValue(sample)
+    onSubmit(sample)
+  }
+
+  useEffect(() => {
+    const shakeDetector = new ShakeDetector()
+    const requestTrigger = document.getElementById('requestTrigger');
+
+    shakeDetector.requestPermission(requestTrigger).then(() => {
+      shakeDetector.start();
+    });
+
+    window.addEventListener(ShakeDetector.SHAKE_EVENT, onShake);
+    return () => window.removeEventListener(ShakeDetector.SHAKE_EVENT, onShake);
+  }, [])
 
   const handleChange = (event) => {
     setValue(event.target.value.trim())
