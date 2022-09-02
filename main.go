@@ -18,13 +18,11 @@ func main() {
 		log.Fatal("Error reading JSON: ", err)
 	}
 
-	////////////////////////
 	var completeWorks Works
 	err = json.Unmarshal(content, &completeWorks)
 	if err != nil {
 		log.Fatal("Error during Unmarshal: ", err)
 	}
-	////////////////////////
 
 	searcher := Searcher{}
 	err = searcher.LoadFile("completeworks.txt")
@@ -121,7 +119,7 @@ func (s *Searcher) LoadFile(filename string) error {
 }
 
 func (s *Searcher) Search(query string) []string {
-	idxs := s.SuffixArray.Lookup([]byte(query), -1)
+	idxs := s.SuffixArray.Lookup([]byte(strings.ToLower(query)), -1)
 	size := len(s.CompleteWorks)
 
 	results := []string{}
