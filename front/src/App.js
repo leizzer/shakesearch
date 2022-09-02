@@ -13,9 +13,10 @@ import Loading from './components/loading'
 // Axios
 import axios from 'axios'
 
-const URL = 'http://localhost:3001'
-
-const searchQuery = (text, callback, errCallback) => axios.get(`${URL}/search?q=${text}`)
+const searchQuery = (text, callback, errCallback) => axios({
+    baseURL: process.env.REACT_APP_AP,
+    url:`search?q=${text}`
+  })
   .then((response) => callback(response.data.Data))
   .catch((error) => {
     errCallback()
