@@ -84,7 +84,9 @@ func handleSearch(searcher Searcher, entireWork Works) func(w http.ResponseWrite
 
 			searchResult := searcher.Search(query[0])
 
-			results.Data = append(results.Data, Result{work.Name, searchResult})
+			if len(searchResult) > 0 {
+				results.Data = append(results.Data, Result{work.Name, searchResult})
+			}
 		}
 
 		buf := &bytes.Buffer{}

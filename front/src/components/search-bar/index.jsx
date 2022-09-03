@@ -56,17 +56,21 @@ const SearchBar = ({onSubmit}) => {
 
     const index = Math.floor(Math.random()*samples.length)
     const sample = samples[index]
+
     setValue(sample)
     onSubmit(sample)
   }
 
   useEffect(() => {
-    const shakeDetector = new ShakeDetector()
-    //const requestTrigger = document.getElementById('requestTrigger');
+    const options = {
+      threshold: 8,
+      debounceDelay: 1000,
+    };
 
-    //shakeDetector.requestPermission(requestTrigger).then(() => {
-      shakeDetector.start();
-    //});
+    const shakeDetector = new ShakeDetector(options)
+
+    shakeDetector.confirmPermissionGranted();
+    shakeDetector.start();
 
     window.addEventListener(ShakeDetector.SHAKE_EVENT, onShake);
     return () => window.removeEventListener(ShakeDetector.SHAKE_EVENT, onShake);

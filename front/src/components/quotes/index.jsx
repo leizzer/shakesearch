@@ -81,7 +81,7 @@ const List = () => {
   ))
 
   return (
-    <Quotes> {list} </Quotes>
+    <Quotes>{list}</Quotes>
   )
 }
 

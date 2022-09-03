@@ -17,7 +17,7 @@ const searchQuery = (text, callback, errCallback) => axios({
     baseURL: process.env.REACT_APP_AP,
     url:`search?q=${text}`
   })
-  .then((response) => callback(response.data.Data))
+  .then((response) => callback(response.data.Data || []))
   .catch((error) => {
     errCallback()
     console.log('ERROR: ', error)
