@@ -110,11 +110,11 @@ const SearchBar = ({ onSubmit }) => {
 
   return (
     <Form id="form" onSubmit={handleSubmit}>
-      <TextInput 
+      <TextInput
         autoFocus
         id="query"
-        name="query" 
-        placeholder={"Try writing Love"} 
+        name="query"
+        placeholder={"Try writing Love"}
         value={value}
         onChange={handleChange}
       />
