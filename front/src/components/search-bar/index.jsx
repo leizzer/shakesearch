@@ -65,7 +65,6 @@ const SearchBar = ({ onSubmit }) => {
   const [value, setValue] = useState('')
 
   const onShake = () => {
-    alert('shake')
     if (value) {
       onSubmit(value)
       return
