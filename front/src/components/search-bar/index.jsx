@@ -65,23 +65,22 @@ const SearchBar = ({ onSubmit }) => {
   const [value, setValue] = useState('')
 
   const onShake = () => {
-    if (value) {
+    if (value.length > 0) {
       onSubmit(value)
-      return
+    } else {
+      const samples = [
+        "love",
+        "Macbeth",
+        "Romeo",
+        "Othello"
+      ]
+
+      const index = Math.floor(Math.random() * samples.length)
+      const sample = samples[index]
+
+      setValue(sample)
+      onSubmit(sample)
     }
-
-    const samples = [
-      "love",
-      "Macbeth",
-      "Romeo",
-      "Othello"
-    ]
-
-    const index = Math.floor(Math.random() * samples.length)
-    const sample = samples[index]
-
-    setValue(sample)
-    onSubmit(sample)
   }
 
   useEffect(() => {
