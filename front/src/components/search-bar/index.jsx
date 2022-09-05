@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useContext} from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import styled from 'styled-components'
 import ShakeDetector from 'shake-detector';
 
@@ -9,19 +9,34 @@ const Form = styled.form`
   with: 100%;
   justify-content: center;
   align-content: space-between;
+
+  @media (max-width: 768px) {
+    width: 90%;
+    padding: 2rem 0px ;
+  }
 `
 
 const TextInput = styled.input.attrs({
   type: 'text'
 })`
+  font-size: 1.5rem;
   align-self: auto;
-  flex-basis: 80%;
+  width: 80%;
   line-height: 4rem;
   text-align: center;
   color: #452f02;
   background-color: #85a8bb;
   border: none;
   border-radius: 10px 0 0;
+
+  ::placeholder {
+    font-style: italic;
+  }
+
+  :focus {
+    outline: none;
+  }
+
 `
 
 const SubmitButton = styled.button.attrs({
@@ -35,10 +50,19 @@ const SubmitButton = styled.button.attrs({
   border: none;
   border-left: 2px solid #b3c8d5;
   border-radius: 0 10px 0 0;
+  padding: 0px 10px;
+
+  :focus {
+    outline: none;
+  }
+
+  :active {
+    background-color: #154155;
+  }
 `
 
-const SearchBar = ({onSubmit}) => {
-  const [value, setValue] = useState()
+const SearchBar = ({ onSubmit }) => {
+  const [value, setValue] = useState('')
 
   const onShake = () => {
     alert('shake')
@@ -54,7 +78,7 @@ const SearchBar = ({onSubmit}) => {
       "Othello"
     ]
 
-    const index = Math.floor(Math.random()*samples.length)
+    const index = Math.floor(Math.random() * samples.length)
     const sample = samples[index]
 
     setValue(sample)
@@ -87,7 +111,14 @@ const SearchBar = ({onSubmit}) => {
 
   return (
     <Form id="form" onSubmit={handleSubmit}>
-      <TextInput autoFocus id="query" name="query" placeholder={"Love"} value={value} onChange={handleChange}/>
+      <TextInput 
+        autoFocus
+        id="query"
+        name="query" 
+        placeholder={"Try writing Love"} 
+        value={value}
+        onChange={handleChange}
+      />
       <SubmitButton>Search</SubmitButton>
     </Form>
   )

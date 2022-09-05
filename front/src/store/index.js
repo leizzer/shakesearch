@@ -11,7 +11,8 @@ const StoreContext = createContext()
 export const initialState = {
   query: null,
   fetching: false,
-  quotes: []
+  quotes: [],
+  found: null
 }
 
 export const reducer = (state, action) => {
@@ -23,7 +24,7 @@ export const reducer = (state, action) => {
     case END_FETCH:
       return {...state, fetching: false}
     case FETCH_SUCCESS:
-      return {...state, fetching: false, quotes: action.payload}
+      return {...state, fetching: false, quotes: action.payload, found: action.payload.length}
     case RESET:
       return initialState
     default:

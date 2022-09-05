@@ -7,14 +7,14 @@ import StoreContext, {reducer, initialState, setQuery, startFetch, endFetch, fet
 import SearchBar from './components/search-bar'
 import QuotesList from './components/quotes'
 import Title from './components/title'
-import SubTitle from './components/sub-title'
+import TextBlock from './components/text-block'
 import Loading from './components/loading'
 
 // Axios
 import axios from 'axios'
 
 const searchQuery = (text, callback, errCallback) => axios({
-    baseURL: process.env.REACT_APP_AP,
+    baseURL: process.env.REACT_APP_API,
     url:`search?q=${text}`
   })
   .then((response) => callback(response.data.Data || []))
@@ -22,7 +22,6 @@ const searchQuery = (text, callback, errCallback) => axios({
     errCallback()
     console.log('ERROR: ', error)
   })
-///////////////////////////////////////////////////////////////////////
 
 const App = () => {
 
@@ -45,13 +44,13 @@ const App = () => {
         Shake Search
       </Title>
 
-      <SubTitle>
+      <TextBlock>
         Look for snippets containing
         <br/>
         <span className="highlighted">a key word</span> in the complete works of
         <br/>
         William Shakespeare
-      </SubTitle>
+      </TextBlock>
 
       <StoreContext.Provider value={{store, dispatch}}>
         <SearchBar onSubmit={submitQuery}/>
